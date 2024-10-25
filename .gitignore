@@ -68,5 +68,8 @@ project.fragment.lock.json
 artifacts/
 *.runtimeconfig.dev.json
 
+app.db
+.vs/Projeto01/v16/.suo
+
 # Uncomment if using .NET Core SDK preview versions
 # .dotnet/
