@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projeto01.Data;
 using Projeto01.Models;
+using Projeto01.Services;
 using Projeto01.ViewModels;
 
 namespace Projeto01.Controllers {
@@ -13,7 +14,7 @@ namespace Projeto01.Controllers {
     public class DoctorController : ControllerBase {
 
         [HttpGet]
-        [Authorize(Roles = "Admin", "Paciente")]
+        [Authorize(Roles = "Admin, Paciente")]
         public async Task<IActionResult> GetAllDoctorsAsync ([FromServices] AppDbContext context) {
             try {
                 var doctors = await context.Doctors.ToListAsync();
@@ -26,7 +27,7 @@ namespace Projeto01.Controllers {
 
 
         [HttpGet("{id}")]
-        [Authorize (Roles = "Admin", "Paciente")]
+        [Authorize(Roles = "Admin, Paciente")]
         public async Task<IActionResult> GetDoctorById ([FromServices] AppDbContext context, [FromRoute] int id) {
             try {
                 var doctorFound = await context.Doctors.FindAsync(id);
