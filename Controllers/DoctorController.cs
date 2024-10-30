@@ -57,7 +57,7 @@ namespace Projeto01.Controllers {
                 await context.Doctors.AddAsync(newDoctor);
                 await context.SaveChangesAsync();
 
-                return Ok();
+                return Ok(newDoctor);
 
             } catch (Exception e) {
                 return StatusCode(500, new { erro = "Falha interna no servidor", exception = e.Message });

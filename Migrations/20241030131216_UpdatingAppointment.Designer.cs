@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Projeto01.Data;
 
@@ -10,9 +11,10 @@ using Projeto01.Data;
 namespace Projeto01.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241030131216_UpdatingAppointment")]
+    partial class UpdatingAppointment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.30");
@@ -85,7 +87,7 @@ namespace Projeto01.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsAvailable")
+                    b.Property<bool>("IsAvaliable")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("StartTime")

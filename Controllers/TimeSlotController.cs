@@ -26,13 +26,13 @@ namespace Projeto01.Controllers {
                     Doctor = doctor,
                     StartTime = timeSlot.StartTime,
                     EndTime = timeSlot.EndTime,
-                    IsAvaliable = true
+                    IsAvailable = true
                 };
 
                 await context.TimeSlots.AddAsync(newTimeSlot);
                 await context.SaveChangesAsync();
 
-                return Ok(newTimeSlot);
+                return Ok(new GetTimeSlotViewModel(newTimeSlot));
 
             } catch (Exception e) {
                 return StatusCode(500, new { erro = "Falha interna no servidor", exception = e.Message });
@@ -44,13 +44,20 @@ namespace Projeto01.Controllers {
         [Authorize(Roles = "Admin, Paciente")]
         public async Task<IActionResult> GetTimeSlotsBySpecialty ([FromServices] AppDbContext context, [FromQuery] string specialty) {
             try {
+
+                var retorno = new List<GetTimeSlotViewModel>();
+
                 var results = await context.TimeSlots
                                             .Include(x => x.Doctor)
                                             .Where(x => x.Doctor.Specialty == specialty)
                                             .Where(x => x.StartTime >= DateTime.Now)
                                             .ToListAsync();
+                                                            
+                foreach (var r in results)
+                    retorno.Add(new GetTimeSlotViewModel(r));
+                
 
-                return Ok(results);
+                return Ok(retorno);
 
             } catch (Exception e)  {
                 return StatusCode(500, new { erro = "Falha interna no servidor", exception = e.Message });
@@ -62,13 +69,18 @@ namespace Projeto01.Controllers {
         [Authorize(Roles = "Admin, Paciente")]
         public async Task<IActionResult> GetTimeSlotsByDoctor ([FromServices] AppDbContext context, [FromRoute] int id) {
             try {
+                var retorno = new List<GetTimeSlotViewModel>();
+
                 var results = await context.TimeSlots
                                                 .Include(x => x.Doctor)
                                                 .Where(x => x.Doctor.Id == id)
                                                 .Where(x => x.StartTime >= DateTime.Now)
                                                 .ToListAsync();
 
-                return Ok(results);
+                foreach (var r in results)
+                    retorno.Add(new GetTimeSlotViewModel(r));
+
+                return Ok(retorno);
 
             } catch (Exception e) {
                 return StatusCode(500, new { erro = "Falha interna no servidor", exception = e.Message });
@@ -77,7 +89,7 @@ namespace Projeto01.Controllers {
 
 
         [HttpDelete("{id}")]
-        [Authorize (Roles = "Admin, Paciente")]
+        [Authorize (Roles = "Admin")]
         public async Task<IActionResult> CancelTimeSlot ([FromServices] AppDbContext context, [FromRoute] int id) {
             try {
                 var timeSlotFound = (from ts in context.TimeSlots
@@ -87,7 +99,7 @@ namespace Projeto01.Controllers {
                 if (timeSlotFound is null)
                     return NotFound();
 
-                if (!timeSlotFound.IsAvaliable)
+                if (!timeSlotFound.IsAvailable)
                     return BadRequest("Não foi possível cancelar esse horário pois já existe uma consulta associada à ele.");
 
                 context.TimeSlots.Remove(timeSlotFound);
@@ -99,5 +111,6 @@ namespace Projeto01.Controllers {
                 return StatusCode(500, new { erro = "Falha interna no servidor", exception = e.Message });
             }
         }
+
     }
 }

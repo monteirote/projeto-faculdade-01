@@ -28,9 +28,8 @@ namespace Projeto01.Controllers {
                 var token = tokenService.CreateToken(user);
                 return Ok(new { token = token });
             }
-            catch
-            {
-                return StatusCode(500, new { message = "Falha interna no servidor" });
+            catch (Exception e) {
+                return StatusCode(500, new { erro = "Falha interna no servidor", exception = e.Message });
             }
         }
 
@@ -57,8 +56,8 @@ namespace Projeto01.Controllers {
 
                 return Ok(new { userId = userNew.Id });
 
-            } catch {
-                return StatusCode(500, new { message = "Falha interna no servidor" });
+            } catch (Exception e) {
+                return StatusCode(500, new { erro = "Falha interna no servidor", exception = e.Message });
             }
         }
 
@@ -78,8 +77,8 @@ namespace Projeto01.Controllers {
 
                 return Ok(users);
 
-            } catch {
-                return StatusCode(500, new { message = "Falha interna no servidor" });
+            } catch (Exception e) {
+                return StatusCode(500, new { erro = "Falha interna no servidor", exception = e.Message });
             }
         }
     }

@@ -4,6 +4,6 @@
         public Doctor Doctor { get; set; } = new Doctor(); 
         public DateTime StartTime { get; set; } = new DateTime();
         public DateTime EndTime { get; set; } = new DateTime();
-        public bool IsAvaliable { get; set; } = false;
+        public bool IsAvailable { get; set; } = false;
     }
 }
