@@ -23,7 +23,7 @@ namespace Projeto01.ViewModels {
 
         public GetTimeSlotViewModel (TimeSlot timeSlot) {
             Id = timeSlot.Id;
-            Doctor = new GetDoctorViewModel { Name = timeSlot.Doctor.Name, Specialty = timeSlot.Doctor.Specialty };
+            Doctor = new GetDoctorViewModel { Id = timeSlot.Doctor.Id, Name = timeSlot.Doctor.Name, Specialty = timeSlot.Doctor.Specialty };
             StartTime = timeSlot.StartTime;
             EndTime = timeSlot.EndTime;
             IsAvailable = timeSlot.IsAvailable;

@@ -97,5 +97,19 @@ namespace Projeto01.Controllers {
                 return StatusCode(500, new { erro = "Falha interna no servidor", exception = e.Message });
             }
         }
+
+
+        [HttpGet("patient/{id}")]
+        [Authorize(Roles = "Admin, Paciente")]
+        public async Task<IActionResult> GetAppointmentsByUser ([FromServices] AppDbContext context, [FromRoute] int id)
+        {
+            var patient = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (patient is null)
+                return BadRequest("O PatientID enviado não corresponde à nenhum registro.");
+
+            var results = await context.Appointments.Where(x => x.Patient.Id == id).ToListAsync();
+
+            return Ok(results);
+        }
     }
 }
