@@ -51,6 +51,7 @@ namespace Projeto01.Controllers {
                                             .Include(x => x.Doctor)
                                             .Where(x => x.Doctor.Specialty == specialty)
                                             .Where(x => x.StartTime >= DateTime.Now)
+                                            .Where(x => x.IsAvailable == true)
                                             .ToListAsync();
                                                             
                 foreach (var r in results)
@@ -75,6 +76,7 @@ namespace Projeto01.Controllers {
                                                 .Include(x => x.Doctor)
                                                 .Where(x => x.Doctor.Id == id)
                                                 .Where(x => x.StartTime >= DateTime.Now)
+                                                .Where(x => x.IsAvailable == true)
                                                 .ToListAsync();
 
                 foreach (var r in results)
