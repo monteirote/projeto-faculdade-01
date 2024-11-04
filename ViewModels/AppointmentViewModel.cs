@@ -12,7 +12,7 @@ namespace Projeto01.ViewModels
         public int TimeSlotId { get; set; }
 
         [Required]
-        public int PatientId { get; set; }
+        public string PatientEmail { get; set; } = string.Empty;
 
         public string Notes { get; set; } = string.Empty;
     }

@@ -24,7 +24,7 @@ namespace Projeto01.Controllers {
                     return BadRequest("O DoctorID enviado não corresponde à nenhum registro.");
 
 
-                var patient = await context.Users.FirstOrDefaultAsync(x => x.Id == model.PatientId);
+                var patient = await context.Users.FirstOrDefaultAsync(x => x.Email == model.PatientEmail);
                 if (patient is null)
                     return BadRequest("O PatientID enviado não corresponde à nenhum registro.");
 
