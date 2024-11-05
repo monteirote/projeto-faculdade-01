@@ -34,4 +34,9 @@ namespace Projeto01.ViewModels
             Notes = appointment.Notes;
         }
     }
+
+    public class EditAppointment
+    {
+        public string Notes { get; set; }
+    }
 }

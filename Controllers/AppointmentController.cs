@@ -99,17 +99,37 @@ namespace Projeto01.Controllers {
         }
 
 
-        [HttpGet("patient/{id}")]
+        [HttpGet("patient")]
         [Authorize(Roles = "Admin, Paciente")]
-        public async Task<IActionResult> GetAppointmentsByUser ([FromServices] AppDbContext context, [FromRoute] int id)
+        public async Task<IActionResult> GetAppointmentsByUser ([FromServices] AppDbContext context, [FromQuery] string email)
         {
-            var patient = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var patient = await context.Users.FirstOrDefaultAsync(x => x.Email == email);
             if (patient is null)
                 return BadRequest("O PatientID enviado não corresponde à nenhum registro.");
 
-            var results = await context.Appointments.Where(x => x.Patient.Id == id).ToListAsync();
+            var appointments = await context.Appointments.Where(x => x.Patient.Id == patient.Id)
+                                                                            .Include(x => x.Doctor)
+                                                                            .Include(x => x.Patient)
+                                                                            .Include(x => x.TimeSlot)
+                                                                            .ToListAsync();
+
+            var results = appointments.Select(x => new GetAppointmentViewModel(x)).ToList();
 
             return Ok(results);
+        }
+
+        [HttpPut("edit/{id}")]
+        [Authorize(Roles = "Admin, Paciente")]
+        public async Task<IActionResult> EditAppointmentNotes([FromRoute] int id, [FromServices] AppDbContext context, [FromBody] EditAppointment model) {
+            var appointmentFound = await context.Appointments.FirstOrDefaultAsync(x => x.Id == id);
+            if (appointmentFound is null)
+                return BadRequest("O Id de consulta enviado não corresponde à nenhum registro.");
+
+            appointmentFound.Notes = model.Notes;
+
+            await context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
